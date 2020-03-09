@@ -1,0 +1,98 @@
+{% extends "website/base.html" %}
+
+{% load recipe_tags %}
+{% load static %}
+
+{% block content %}
+    <div class="row">
+        <div class="col-sm-6">
+            <form action="">
+                <div class="input-group mb-3">
+                    <input data-url="{% url "search-ingredients" %}" id="ingredients-search" name="query" type="text"
+                           class="form-control"
+                           placeholder="Ingredients Search"
+                           aria-label="Recipient's username" aria-describedby="basic-addon2">
+                    <div class="input-group-append">
+                        <button id="search-input-submit" style="display: inline" class="input-group-text" id="search-addon"><i
+                                class="fa fa-search"></i></button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+
+    <div id="searched-recipes" class="row">
+
+    </div>
+
+    <div class="row">
+        <div id="categories-title" class="grey-background text-center col-12">
+            <h4>Categories</h4>
+        </div>
+    </div>
+
+    <div class="row">
+        {% for category in categories %}
+
+            <div class="col-md-2 col-lg-1 text-center">
+                <a href="{% url "recipes-recipes_list" %}?category={{ category.id }}">
+                    {% if category.image %}
+                        <img class="category-img rounded-circle" src="{{ category.image.url }}" alt="">
+                    {% else %}
+                        <img class="category-img rounded-circle" src="{% static "website/images/default.png" %}" alt="">
+                    {% endif %}
+                    <p>{{ category.name }}</p>
+                </a>
+            </div>
+        {% endfor %}
+    </div>
+
+
+    <div class="row">
+        <div id="categories-title" class="grey-background text-center col-12">
+            <h4>Largest Number Of Recipes</h4>
+        </div>
+    </div>
+
+
+    <div class="row">
+        {% for user in highest_recipe_count_users %}
+            <div class="col-sm-12 col-md-6 col-lg-3">
+                <article class="media content-section h-75">
+                    {% if  user.profile.image %}
+                        <img class="rounded-circle article-img" src="{{ user.profile.image.url }}">
+                    {% else %}
+                        <img class="rounded-circle article-img" src="{% static "website/images/default.png" %}">
+                    {% endif %}
+                    <div class="media-body">
+                        <div class="article-metadata">
+                            <h5>{{ user.username }}</h5>
+                        </div>
+                        <p>{{ user.email }}</p>
+                        <p>{{ user.recipe_count }} Recipes</p>
+                    </div>
+                </article>
+            </div>
+        {% endfor %}
+    </div>
+
+    <div class="row">
+        <div id="categories-title" class="grey-background text-center col-12">
+            <h4>Top Rated Recipes</h4>
+        </div>
+    </div>
+
+
+    {% for category, category_recipes in recipes.items %}
+        <div class="row">
+            {% for recipe in category_recipes %}
+                <div class="col-md-6 col-lg-4 mb-2 mt-2">
+                    {% include "recipes/recipe_card.html" %}
+                </div>
+            {% endfor %}
+        </div>
+    {% endfor %}
+
+
+{% endblock content %}

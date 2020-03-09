@@ -1,0 +1,18 @@
+{% load static %}
+<article class="media content-section h-100">
+    {% if comment.created_by.profile.image %}
+        <img class="rounded-circle article-img" src="{{ comment.created_by.profile.image.url }}">
+    {% else %}
+        <img class="rounded-circle article-img" src="{% static "website/images/default.png" %}">
+    {% endif %}
+    <div class="media-body">
+        <div class="article-metadata">
+            <div class="pre-rating">
+                <a class="mr-2"
+                   href="{% url 'user-recipes' comment.created_by.username %}">{{ comment.created_by.username }}</a>
+                <small style="display: inline" class="text-muted">{{ comment.date_created }}</small>
+            </div>
+        </div>
+        <p class="article-content">{{ comment.text }}</p>
+    </div>
+</article>

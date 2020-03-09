@@ -1,0 +1,62 @@
+{% extends "website/base.html" %}
+{% load static %}
+{% block content %}
+    <div class="col-md-6">
+        <article class="media content-section">
+            {% if object.created_by.profile.image %}
+                <img class="rounded-circle article-img" src="{{ object.created_by.profile.image.url }}">
+            {% else %}
+                <img class="rounded-circle article-img" src="{% static "website/images/default.png" %}">
+            {% endif %}
+            <div class="media-body">
+                <div class="article-metadata">
+                    <a class="mr-2" href="{% url 'user-posts' object.created_by.username %}">{{ object.created_by }}</a>
+                    <small class="text-muted">{{ object.date_created|date:"F d, Y" }}</small>
+                    {% if object.created_by == user %}
+                        <div>
+                            <a class="btn btn-secondary btn-sm mt-1 mb-1" href="{% url 'post-update' object.id %}">Update</a>
+                            <a class="btn btn-danger btn-sm mt-1 mb-1"
+                               href="{% url 'post-delete' object.id %}">Delete</a>
+                        </div>
+                    {% endif %}
+                </div>
+                <h2 class="article-title"> {{ object.title }}</h2>
+                <p class="article-content">{{ object.content }}</p>
+                {% if object.image %}
+                    <img class="img-fluid img-thumbnail" src="{{ post.image.url }}">
+                {% else %}
+                    <img class="img-fluid img-thumbnail" src="{% static "website/images/default.png" %}">
+                {% endif %}
+            </div>
+        </article>
+    </div>
+    <hr>
+    <article class="col-md-6">
+        <div class="accordion" id="accordionExample">
+            <p class="comments-count"><span>{{ post.comments.count }} </span>total comments</p>
+            <h2 class="mb-0">
+                <button {% if not request.user.is_anonymous %}data-user-id="{{ request.user.id }}" {% endif %}data-post-id="{{ post.id }}"
+                        data-form-url="{% url "post-comment-create" %}"
+                        data-url="{% url "post-comments-list" %}?post_id={{ post.id }}"
+                        class="post-comments-show btn btn-link" type="button" data-toggle="collapse"
+                        data-target="#post-comments-{{ post.id }}"
+                        aria-expanded="true" aria-controls="collapseOne">
+                    Add Comment
+                </button>
+            </h2>
+        </div>
+
+        <div id="post-comments-{{ post.id }}" class="collapse hidden" aria-labelledby="headingOne"
+             data-parent="#accordionExample">
+            <div class="card-body">
+                <div class="previous-comments">
+                </div>
+                <div class="new-comments">
+                </div>
+                <div class="comment-form-container">
+
+                </div>
+            </div>
+        </div>
+    </article>
+{% endblock content %}

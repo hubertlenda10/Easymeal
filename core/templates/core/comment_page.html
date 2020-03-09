@@ -1,0 +1,8 @@
+{% load el_pagination_tags %}
+
+{% paginate 3 comments as paginated_comments %}
+{% for comment in paginated_comments %}
+    {% include "core/comment_card.html" with comment=comment %}
+{% endfor %}
+{% show_more %}
+

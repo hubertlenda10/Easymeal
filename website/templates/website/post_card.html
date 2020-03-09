@@ -1,0 +1,49 @@
+{% load static %}
+<article class="post-card media h-100 content-section">
+    {% if post.created_by.profile.image %}
+        <img class="rounded-circle article-img" src="{{ post.created_by.profile.image.url }}">
+    {% else %}
+        <img class="rounded-circle article-img" src="{% static "website/images/default.png" %}">
+    {% endif %}
+    <div class="media-body">
+        <div class="article-metadata">
+            <a class="mr-2" href="{% url 'user-posts' post.created_by.username %}">{{ post.created_by }}</a>
+            <small class="text-muted">{{ post.date_created|date:"F d, Y" }}</small>
+        </div>
+        <h2><a class="article-title" href="{% url 'post-detail' post.id %}">{{ post.title }}</a></h2>
+        <p class="article-content">{{ post.content }}</p>
+        {% if post.image %}
+            <img class="img-fluid img-thumbnail" src="{{ post.image.url }}">
+        {% else %}
+            <img class="img-fluid img-thumbnail" src="{% static "website/images/default.png" %}">
+        {% endif %}
+
+        <hr>
+        <div class="accordion" id="accordionExample">
+            <b><p class="comments-count"><span>{{ post.comments.count }} </span>total comments</p></b>
+            <h2 class="mb-0">
+                <button {% if not request.user.is_anonymous %}data-user-id="{{ request.user.id }}" {% endif %}data-post-id="{{ post.id }}"
+                        data-form-url="{% url "post-comment-create" %}"
+                        data-url="{% url "post-comments-list" %}?post_id={{ post.id }}"
+                        class="post-comments-show btn btn-link" type="button" data-toggle="collapse"
+                        data-target="#post-comments-{{ post.id }}"
+                        aria-expanded="true" aria-controls="collapseOne">
+                    Add Comment
+                </button>
+            </h2>
+        </div>
+
+        <div id="post-comments-{{ post.id }}" class="collapse hidden" aria-labelledby="headingOne"
+             data-parent="#accordionExample">
+            <div class="card-body">
+                <div class="previous-comments">
+                </div>
+                <div class="new-comments">
+                </div>
+                <div class="comment-form-container">
+
+                </div>
+            </div>
+        </div>
+    </div>
+</article>

@@ -1,0 +1,68 @@
+{% load recipe_tags %}
+{% load static %}
+<article class="recipe-card media h-100 content-section">
+    {% if recipe.created_by.profile.image %}
+        <img class="rounded-circle article-img" src="{{ recipe.created_by.profile.image.url }}">
+    {% else %}
+        <img class="rounded-circle article-img" src="{% static "website/images/default.png" %}">
+    {% endif %}
+    <div class="media-body">
+        <div class="article-metadata">
+            <div class="pre-rating">
+                <a class="mr-2" href="{% url 'user-recipes' recipe.created_by.username %}">{{ recipe.created_by }}</a>
+                <small style="display: inline" class="text-muted">{{ recipe.date_created }}</small>
+            </div>
+            <small class="rating-info">&emsp; <br><b>average rating:</b> {{ recipe.average_rating }}</small>
+            <div {% if not request.user.is_anonymous %}data-user-id="{{ request.user.id }}"{% endif %}
+                 data-url="{% url "recipe-rating-create" %}"
+                 data-recipe-id="{{ recipe.id }}"
+                 {% if not request.user.is_anonymous %}data-rate-value="{% get_rating request.user recipe %}"{% endif %}
+                 class="rating float-right">&nbsp;
+            </div>
+            
+            <h2><a class="article-title" href="{% url 'recipe-detail' recipe.id %}">{{ recipe.title }}</a></h2>
+            {% if recipe.image %}
+                <img class="img-fluid img-thumbnail" src="{{ recipe.image.url }}">
+            {% else %}
+                <img class="img-fluid img-thumbnail" src="{% static "website/images/default.png" %}">
+            {% endif %}
+        </div>
+
+        {% if show_full %}<p class="article-content">{{ recipe.content }}</p>{% endif %}
+        <p class="article-content"><b>Description:</b><br>{{ recipe.content }}</p>
+        <p class="article-content"><b>Category:</b> <br>{{ recipe.category.name }}</p>
+        <br>
+        {% if show_full %} <p class="article-content"><b>Cooking Time:</b><br> {{ recipe.cooking_time }}</p> {% endif %}
+
+        <hr>
+        {% if show_full %}
+            <div class="accordion" id="accordionExample">
+                <p class="comments-count"><span>{{ recipe.comments.count }} </span>total comments</p>
+                <h2 class="mb-0">
+                    <button {% if not request.user.is_anonymous %}data-user-id="{{ request.user.id }}"{% endif %}
+                            data-recipe-id="{{ recipe.id }}"
+                            data-form-url="{% url "recipe-comment-create" %}"
+                            data-url="{% url "recipe-comments-list" %}?post_id={{ post.id }}"
+                            class="recipe-comments-show btn btn-link" type="button" data-toggle="collapse"
+                            data-target="#recipe-comments-{{ recipe.id }}"
+                            aria-expanded="true" aria-controls="collapseOne">
+                        Add Comment
+                    </button>
+                </h2>
+            </div>
+
+            <div id="recipe-comments-{{ recipe.id }}" class="collapse hidden" aria-labelledby="headingOne"
+                 data-parent="#accordionExample">
+                <div class="card-body">
+                    <div class="previous-comments">
+                    </div>
+                    <div class="new-comments">
+                    </div>
+                    <div class="comment-form-container">
+
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+    </div>
+</article>

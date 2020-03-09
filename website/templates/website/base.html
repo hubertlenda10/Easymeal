@@ -1,0 +1,110 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="{% static "website/bootstrap/css/bootstrap.min.css" %}" type="text/css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-star-rating/4.0.6/css/star-rating.min.css" media="all"
+          rel="stylesheet" type="text/css"/>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" type="text/css" href="{% static 'website/main.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css">
+
+
+
+    {% if title %}
+        <title>Easy Meal - {{ title }}</title>
+    {% else %}
+        <title> Easy Meal</title>
+    {% endif %}
+</head>
+<body>
+<header class="site-header">
+    <nav class="navbar navbar-expand-md navbar-dark bg-steel fixed-top">
+        <div class="container">
+            <a class="navbar-brand mr-4" href="{% url 'website-home' %}">
+                EASY MEAL
+                
+                <img src="{% static "website/images/board1.jpg" %}" alt="">
+                
+            </a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarToggle"
+                    aria-controls="navbarToggle" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarToggle">
+                <div class="navbar-nav mr-auto">
+                    <a class="nav-item nav-link" href="{% url 'website-about' %}">About</a>
+                    <a class="nav-item nav-link" href="{% url 'website-blog' %}">Healty Blog</a>
+                    <a class="nav-item nav-link" href="{% url 'recipes-recipes_list' %}">Recipes</a>
+
+                </div>
+                <!-- Navbar Right Side -->
+                <div class="navbar-nav">
+                    {% if user.is_authenticated %}
+                        <a class="nav-item nav-link" href="{% url 'recipe-create' %}">New Recipe</a>
+                        <a class="nav-item nav-link" href="{% url 'post-create' %}">New Post</a>
+                        <a class="nav-item nav-link" href="{% url 'profile' %}">Profile</a>
+                        <a class="nav-item nav-link" href="{% url 'logout' %}">Logout</a>
+                    {% else %}
+                        <a class="nav-item nav-link" href="{% url 'login' %}">Login</a>
+                        <a class="nav-item nav-link" href="{% url 'register' %}">Register</a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </nav>
+</header>
+<main class="main-container" role="main">
+    <div class="row">
+        <div class="col">
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+                {% endfor %}
+            {% endif %}
+            {% block content %}{% endblock %}
+        </div>
+    </div>
+
+    <!-- Footer -->
+<footer class="page-footer font-small blue">
+<hr>
+        <div class="text-center center-block">
+            
+                <h4> Follow Us</h4>
+                <br>
+                <a href="https://www.facebook.com"><i id="social-fb" class="fa fa-facebook-square fa-3x social"></i></a>
+                <a href="https://twitter.comp"><i id="social-tw" class="fa fa-twitter-square fa-3x social"></i></a>
+                <a href="mailto:hubertlenda10@gmail.com"><i id="social-em" class="fa fa-envelope-square fa-3x social"></i></a>
+                <a href="https://instagram.com"><i id="social-in" class="fa fa-instagram fa-3x social" aria-hidden="true"></i></a>
+
+        </div>
+
+  <div class="footer-copyright text-center py-3">© 2019 Copyright:
+    <a href="https://mdbootstrap.com/education/bootstrap/"> Hubert Lenda</a>
+    <br>
+  </div>
+  <!-- Copyright -->
+
+</footer>
+<!-- Footer -->
+</main>
+
+{% include "core/sign_in_modal.html" %}
+<script type="text/javascript" src="{% static "website/js/jquery-3.4.1.min.js" %}"></script>
+<script type="text/javascript" src="{% static "website/el_pagination/el_pagination.js" %}"></script>
+<script type="text/javascript" src="{% static "website/rater/rater.js" %}" charset="UTF-8"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+        integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+        crossorigin="anonymous"></script>
+<script src="{% static "website/bootstrap/js/bootstrap.min.js" %}" type="text/javascript"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
+<script type="text/javascript" src="{% static "website/js/main.js" %}"></script>
+</body>
+</html>

@@ -1,0 +1,7 @@
+{% load crispy_forms_tags %}
+
+<form action="{% url "post-comment-create" %}" class="comment-form">
+    {% csrf_token %}
+    {{ form|crispy }}
+    <button type="submit" class="btn-sm btn btn-primary">submit</button>
+</form>
